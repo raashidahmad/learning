@@ -1,0 +1,6 @@
+{
+    "/projectReports/:report": "/projectReports?report=:report",
+    "/pursuitReports/:report": "/pursuitReports?report=:report",
+    "/chartReports/:report": "/chartReports?report=:report",
+    "/states/:code": "/states?code=:code"
+}

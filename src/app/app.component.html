@@ -1,0 +1,61 @@
+<!--
+  1. The Mock API is an angular based application that will use different packages to develop
+  a mock API based on the json file. The json file will be created and maintained by writing the script.
+
+  2. The schema of the json database will grow and be refined as the progress is being made.
+
+  3. Initially a basic schema will be setup for the simple data and it will be refined as learned more about the schema
+
+  4. It is intended to create the data using some mock package
+
+  5. The plan is to test the apis here before handing it over to the UI team
+
+  6. The default port for json-server is 3000, we can change it in the package code
+
+  7. With the current configuration the 
+
+  Important: 
+  Node version: 12.9.1
+  Angular Cli Version: 11.2.15
+
+  How to use application:
+  1. First run the server using this command (npm run server), you will be able to access the server at http://localhost:3000.
+  You will see the help on the given Url
+  2. The second part of this application is angular application that only provides help about the used schema. Run it using
+  (npm run start). You can access it at http://localhost:4200
+
+  //"server": "json-server --watch ./src/api/database.json --routes ./src/api/routes.json"
+
+  Sorting through query
+  http://localhost:3000/siteCharts?_sort=chartsCount&_order=desc
+  The query above tells the server to get the data available at siteCharts, order it by charts count, 
+  and do the ordering in descending
+
+  Pagination in the query
+  http://localhost:3000/siteCharts?_page=1&_limit=5
+  The following query tells the server to get the first 5 records. Remember limit is optional, if you leave the limit,
+  it will pick up the 10 records by default
+
+  http://localhost:3000/siteCharts?_start=1&_end=20
+  The following query is equivalent to pagination that tells the server to start from 1 and end it at 20
+
+  http://localhost:3000/siteCharts?siteName_like=locks
+  The following query fetches the site names matching to the provided criteria using the like operator
+  
+-->
+
+<div class="container">
+  <h3>Schema for Json Database</h3>
+
+  <table class="table table-bordered table-striped">
+    <ng-container *ngFor="let e of schema">
+      <tr>
+        <th colspan="2">Entity name: {{e.entity}}</th>
+      </tr>
+      <tr *ngFor="let f of e.fields">
+        <td>{{f.field}}</td>
+        <td>{{f.type}}</td>
+      </tr>
+    </ng-container>
+  </table>
+</div>
