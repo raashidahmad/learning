@@ -41,21 +41,15 @@
 
   http://localhost:3000/siteCharts?siteName_like=locks
   The following query fetches the site names matching to the provided criteria using the like operator
+
+  /*if (parts.length > 0) {
+        let criteria = parts[parts.length - 1];
+        siteCharts = siteCharts.filter(s => s.siteId == criteria || (s.siteName.toLowerCase().indexOf(criteria.toLowerCase()) != -1));
+    }*/
   
 -->
 
 <div class="container">
   <h3>Schema for Json Database</h3>
 
-  <table class="table table-bordered table-striped">
-    <ng-container *ngFor="let e of schema">
-      <tr>
-        <th colspan="2">Entity name: {{e.entity}}</th>
-      </tr>
-      <tr *ngFor="let f of e.fields">
-        <td>{{f.field}}</td>
-        <td>{{f.type}}</td>
-      </tr>
-    </ng-container>
-  </table>
 </div>

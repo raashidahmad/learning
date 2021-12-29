@@ -17,19 +17,23 @@ var database = {
     "chartReports": [],
     "sitePursuits": [],
     "siteCharts": [],
-    "statusReport": []
+    "statuses": [],
+    "subStatuses": [],
+    "subSubStatuses": [],
+    "pursuitStatuses": [],
+    "chartStatuses": []
 };
 
 let dated = new Date();
 let currentYear = dated.getFullYear();
 let index = 1, projectId = 1, serviceId = 1, medicalGroupId = 1, siteId = 1,
     providerId = 1, specialityId = 1;
-let sites = [], importDates = [];
+let states = [], sites = [], importDates = [];
 let statuses = [
-    { "id": 1, "status": "Pursuable", "subStatuses": [] },
-    { "id": 2, "status": "Completed", "subStatuses": [] },
-    { "id": 3, "status": "Issued", "subStatuses": [] },
-    { "id": 4, "status": "Closed", "subStatuses": [] }
+    { "statusId": 1, "status": "Pursuable", "subStatuses": [] },
+    { "statusId": 2, "status": "Completed", "subStatuses": [] },
+    { "statusId": 3, "status": "Issued", "subStatuses": [] },
+    { "statusId": 4, "status": "Closed", "subStatuses": [] }
 ];
 
 for (var year = currentYear; year >= (currentYear - 50); year--) {
@@ -48,6 +52,7 @@ for (var year = currentYear; year >= (currentYear - 50); year--) {
         code: stateCode,
         state: state
     };
+    states.push(newState);
     database.states.push(newState);
 
     /*
@@ -226,7 +231,148 @@ database.chartReports.push(
 /*
 Creating data for statuses
 */
+
+let statusId = 1;
 statuses.forEach((s) => {
+    let stateIndex = helper.getRandomInRange(1, 50);
+    let stateObj = states[stateIndex];
+    let importDateIndex = helper.getRandomInRange(1, 50);
+    s.stateCode = stateObj.code;
+    s.serviceYearId = helper.getRandomInRange(1, 50);
+    s.serviceId = helper.getRandomInRange(1, 50);
+    s.projectId = helper.getRandomInRange(1, 50);
+    s.medicalGroupId = helper.getRandomInRange(1, 50);
+    s.siteId = helper.getRandomInRange(1, 50);
+    s.providerId = helper.getRandomInRange(1, 50);
+    s.specialityId = helper.getRandomInRange(1, 50);
+    s.importDate = importDates[importDateIndex];
+
+    database.statuses.push(s);
+    let subLimit = helper.getRandomInRange(3, 5);
+    for (let i = 0; i < subLimit; i++) {
+        let subStatus = {
+            "subStatusId": statusId++,
+            "statusId": s.statusId,
+            "subStatus": faker.random.words(3),
+            "subSubStatuses": []
+        };
+
+        let subSubLimit = helper.getRandomInRange(1, 3);
+        for (let j = 0; j < subSubLimit; j++) {
+            let subSubStatus = {
+                "subSubStatusId": statusId++,
+                "subStatusId": subStatus.subStatusId,
+                "subSubStatus": faker.random.words(2),
+            }
+            subStatus.subSubStatuses.push(subSubStatus);
+            database.subSubStatuses.push(subSubStatus);
+        }
+        database.subStatuses.push(subStatus);
+        s.subStatuses.push(subStatus);
+    }
+});
+
+let pursuitStatuses = JSON.parse(JSON.stringify(statuses));
+pursuitStatuses.forEach((s) => {
+    let levelOneStatusValue = 1;
+    let iteration = s.subStatuses.length;
+
+    if (s.statusId == 1) {
+        levelOneStatusValue = helper.getRandomInRange(15000, 16000);
+    } else if (s.statusId == 2) {
+        levelOneStatusValue = helper.getRandomInRange(2500, 3000);
+    } else if (s.statusId == 3) {
+        levelOneStatusValue = helper.getRandomInRange(2000, 2500);
+    } else if (s.statusId == 4) {
+        levelOneStatusValue = helper.getRandomInRange(1500, 2000);
+    }
+
+    let levelTwoAllocated = iteration == 1 ? levelOneStatusValue : parseInt((levelOneStatusValue / 2).toString());
+    let levelTwoRemaining = levelTwoAllocated;
+    s.value = levelOneStatusValue;
+
+    for (var i = 0; i < iteration; i++) {
+        let randomValue = 1;
+        if (i == 0) {
+            s.subStatuses[i].value = levelTwoAllocated;
+        } else if (i > 0 && i < iteration - 1) {
+            randomValue = parseInt(helper.getRandomInRange(1, (levelTwoRemaining / 2)).toString());
+            s.subStatuses[i].value = randomValue;
+            levelTwoRemaining = levelTwoRemaining - randomValue;
+        } else {
+            s.subStatuses[i].value = levelTwoRemaining;
+        }
+
+        let internalIteration = s.subStatuses[i].subSubStatuses.length;
+        let levelThreeAllocated = internalIteration == 1 ? s.subStatuses[i].value : parseInt((s.subStatuses[i].value / 2).toString());
+        let levelThreeRemaining = levelThreeAllocated;
+
+        for (var j = 0; j < internalIteration; j++) {
+            if (j == 0) {
+                s.subStatuses[i].subSubStatuses[j].value = levelThreeAllocated;
+            } else if (j > 0 && j < internalIteration - 1) {
+                let randomValue = parseInt(helper.getRandomInRange(1, levelThreeRemaining / 2).toString());
+                s.subStatuses[i].subSubStatuses[j].value = randomValue;
+                levelThreeRemaining = levelThreeRemaining - randomValue;
+            } else {
+                s.subStatuses[i].subSubStatuses[j].value = levelThreeRemaining;
+            }
+        }
+    }
+    database.pursuitStatuses.push(s);
+});
+
+let chartStatuses = JSON.parse(JSON.stringify(statuses));
+chartStatuses.forEach((s) => {
+    let levelOneStatusValue = 1;
+    let iteration = s.subStatuses.length;
+
+    if (s.statusId == 1) {
+        levelOneStatusValue = helper.getRandomInRange(15000, 16000);
+    } else if (s.statusId == 2) {
+        levelOneStatusValue = helper.getRandomInRange(2500, 3000);
+    } else if (s.statusId == 3) {
+        levelOneStatusValue = helper.getRandomInRange(2000, 2500);
+    } else if (s.statusId == 4) {
+        levelOneStatusValue = helper.getRandomInRange(1500, 2000);
+    }
+
+    let levelTwoAllocated = iteration == 1 ? levelOneStatusValue : parseInt((levelOneStatusValue / 2).toString());
+    let levelTwoRemaining = levelTwoAllocated;
+    s.value = levelOneStatusValue;
+
+    for (var i = 0; i < iteration; i++) {
+        let randomValue = 1;
+        if (i == 0) {
+            s.subStatuses[i].value = levelTwoAllocated;
+        } else if (i > 0 && i < iteration - 1) {
+            randomValue = parseInt(helper.getRandomInRange(1, (levelTwoRemaining / 2)).toString());
+            s.subStatuses[i].value = randomValue;
+            levelTwoRemaining = levelTwoRemaining - randomValue;
+        } else {
+            s.subStatuses[i].value = levelTwoRemaining;
+        }
+
+        let internalIteration = s.subStatuses[i].subSubStatuses.length;
+        let levelThreeAllocated = internalIteration == 1 ? s.subStatuses[i].value : parseInt((s.subStatuses[i].value / 2).toString());
+        let levelThreeRemaining = levelThreeAllocated;
+
+        for (var j = 0; j < internalIteration; j++) {
+            if (j == 0) {
+                s.subStatuses[i].subSubStatuses[j].value = levelThreeAllocated;
+            } else if (j > 0 && j < internalIteration - 1) {
+                let randomValue = parseInt(helper.getRandomInRange(1, levelThreeRemaining / 2).toString());
+                s.subStatuses[i].subSubStatuses[j].value = randomValue;
+                levelThreeRemaining = levelThreeRemaining - randomValue;
+            } else {
+                s.subStatuses[i].subSubStatuses[j].value = levelThreeRemaining;
+            }
+        }
+    }
+    database.chartStatuses.push(s);
+});
+
+/*statuses.forEach((s) => {
     let levelOneStatusValue = 1;
     let iteration = 5;
     let levelOneStatus = {
@@ -296,7 +442,7 @@ statuses.forEach((s) => {
     }
     s.subStatuses = levelTwoStatuses;
 });
-database.statusReport.push(statuses);
+database.statusReport.push(statuses);*/
 
 var json = JSON.stringify(database);
 fs.writeFile('src/api/database.json', json, 'utf8', (err) => {

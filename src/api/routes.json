@@ -2,5 +2,18 @@
     "/projectReports/:report": "/projectReports?report=:report",
     "/pursuitReports/:report": "/pursuitReports?report=:report",
     "/chartReports/:report": "/chartReports?report=:report",
-    "/states/:code": "/states?code=:code"
+    "/states/:code": "/states?code=:code",
+    "/services/:serviceId": "/serviceNames?serviceId=:serviceId",
+    "/projects/:projectId": "/projectNames?projectId=:projectId",
+    "/medicalGroups/:medicalGroupId": "/medicalGroups?medicalGroupId=:medicalGroupId",
+    "/sites/:siteId": "/sites?siteId=:siteId",
+    "/providers/:providerId": "/providers?providerId=:providerId",
+    "/providerSpecialities/:specialityId": "/providerSpecialities?specialityId=:specialityId",
+    "/sitePursuits/:siteId": "/sitePursuits?siteId=:siteId",
+    "/siteCharts/:siteId": "/siteCharts?siteId=:siteId",
+    "/statuses/:statusId": "/statuses?statusId=:statusId",
+    "/subStatuses/:subStatusId": "/subStatuses?subStatusId=:subStatusId",
+    "/subSubStatuses/:subSubStatusId": "/subSubStatuses?subSubStatusId=:subSubStatusId",
+    "/pursuitStatuses/:statusId": "/pursuitStatuses?statusId=:statusId",
+    "/chartStatuses/:statusId": "/chartStatuses?statusId=:statusId"
 }

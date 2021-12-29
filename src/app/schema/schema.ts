@@ -70,7 +70,7 @@ export const Schema = {
             ]
         },
         {
-            "entity": "Siste Pursuits Summary",
+            "entity": "Site Pursuits Summary",
             "fields": [
                 { "field": "state", "type": dataTypes.STRING },
                 { "field": "stateId", "type": dataTypes.NUMBER },
@@ -81,6 +81,28 @@ export const Schema = {
                 { "field": "providerId", "type": dataTypes.NUMBER },
                 { "field": "specialityId", "type": dataTypes.NUMBER },
                 { "field": "pursuitCount", "type": dataTypes.NUMBER },
+                { "field": "pursuable", "type": dataTypes.NUMBER },
+                { "field": "closed", "type": dataTypes.NUMBER },
+                { "field": "issued", "type": dataTypes.NUMBER },
+                { "field": "completed", "type": dataTypes.NUMBER },
+                { "field": "completedPercent", "type": dataTypes.NUMBER },
+                { "field": "available", "type": dataTypes.NUMBER },
+                { "field": "availablePercent", "type": dataTypes.NUMBER },
+                { "field": "importDate", "type": dataTypes.DATED },
+            ]
+        },
+        {
+            "entity": "Site Charts Summary",
+            "fields": [
+                { "field": "state", "type": dataTypes.STRING },
+                { "field": "stateId", "type": dataTypes.NUMBER },
+                { "field": "siteName", "type": dataTypes.STRING },
+                { "field": "serviceId", "type": dataTypes.NUMBER },
+                { "field": "projectId", "type": dataTypes.NUMBER },
+                { "field": "medicalGroupId", "type": dataTypes.NUMBER },
+                { "field": "providerId", "type": dataTypes.NUMBER },
+                { "field": "specialityId", "type": dataTypes.NUMBER },
+                { "field": "chartsCount", "type": dataTypes.NUMBER },
                 { "field": "pursuable", "type": dataTypes.NUMBER },
                 { "field": "closed", "type": dataTypes.NUMBER },
                 { "field": "issued", "type": dataTypes.NUMBER },
